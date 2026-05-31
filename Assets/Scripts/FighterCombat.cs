@@ -57,6 +57,13 @@ public class FighterCombat : MonoBehaviour
     [Header("Death")]
     public float deathFadeDuration = 1.25f;
 
+    [Header("Audio")]
+    public AudioSource audioSource;
+    public AudioClip swordClip;
+    public AudioClip damageClip;
+    public AudioClip clashClip;
+    public AudioClip deathClip;
+
     private FighterController controller;
     private Rigidbody2D rb;
     private Animator animator;
@@ -98,6 +105,9 @@ public class FighterCombat : MonoBehaviour
         controller = GetComponent<FighterController>();
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+
+        if (audioSource == null)
+            audioSource = GetComponent<AudioSource>();
 
         if (controller != null && controller.opponent != null)
         {
@@ -307,6 +317,14 @@ public class FighterCombat : MonoBehaviour
         return -1f;
     }
 
+    void PlayClip(AudioClip clip)
+    {
+        if (audioSource == null || clip == null)
+            return;
+
+        audioSource.PlayOneShot(clip);
+    }
+
     public bool TryConsumeMovementStamina(float deltaTime)
     {
         if (IsDead || MatchEnded)
@@ -354,6 +372,7 @@ public class FighterCombat : MonoBehaviour
         StopBlocking();
 
         currentState = FighterState.AttackHigh;
+        PlayClip(swordClip);
 
         CancelInvoke(nameof(EndAttack));
         Invoke(nameof(EndAttack), attackDuration);
@@ -376,6 +395,7 @@ public class FighterCombat : MonoBehaviour
         StopBlocking();
 
         currentState = FighterState.AttackLow;
+        PlayClip(swordClip);
 
         CancelInvoke(nameof(EndAttack));
         Invoke(nameof(EndAttack), attackDuration);
@@ -443,6 +463,8 @@ public class FighterCombat : MonoBehaviour
             return;
         }
 
+        PlayClip(damageClip);
+
         currentHealth -= 10;
         if (currentHealth < 0)
             currentHealth = 0;
@@ -465,6 +487,8 @@ public class FighterCombat : MonoBehaviour
     {
         if (IsDead || MatchEnded)
             return;
+
+        PlayClip(clashClip);
 
         currentState = FighterState.Clash;
 
@@ -505,6 +529,8 @@ public class FighterCombat : MonoBehaviour
 
         currentState = FighterState.Dead;
         animator.speed = 1f;
+
+        PlayClip(deathClip);
 
         rb.linearVelocity = Vector2.zero;
 
