@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 14b6ab7c99b5b9b4da96d0c5d7f977d4
+guid: 100c65255c58d554d94db6c7dbc57529
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -3451699440861859892
-    second: MainMenu_0
+      213: 3541734497707530181
+    second: frame_0000_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -96,27 +96,40 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: MainMenu_0
+      name: frame_0000_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 1600
-        height: 900
+        width: 1362
+        height: 768
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: ccfa30c75a91910d0800000000000000
-      internalID: -3451699440861859892
+      spriteID: 5c79a90c2c4c62130800000000000000
+      internalID: 3541734497707530181
       vertices: []
       indices: 
       edges: []
@@ -125,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: fd55d2a9aa4fa714198ab236b0193ba7
     internalID: 0
     vertices: []
     indices: 
@@ -133,9 +146,11 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      MainMenu_0: -3451699440861859892
+      frame_0000_0: 3541734497707530181
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
