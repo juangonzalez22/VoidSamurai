@@ -4,6 +4,7 @@ public class FighterController : MonoBehaviour
 {
     [Header("Movement")]
     public float moveSpeed = 5f;
+    public float stickDeadzone = 0.2f;
 
     [Header("References")]
     public Transform opponent;
@@ -41,18 +42,18 @@ public class FighterController : MonoBehaviour
 
         if (gameObject.name == "Player1")
         {
-            if (Input.GetKey(KeyCode.A))
-                moveInput = -1f;
+            float axis = Input.GetAxisRaw("Horizontal");
 
-            if (Input.GetKey(KeyCode.D))
-                moveInput = 1f;
+            if (Mathf.Abs(axis) >= stickDeadzone)
+                moveInput = Mathf.Sign(axis);
+            else
+                moveInput = 0f;
         }
         else
         {
             if (Input.GetKey(KeyCode.LeftArrow))
                 moveInput = -1f;
-
-            if (Input.GetKey(KeyCode.RightArrow))
+            else if (Input.GetKey(KeyCode.RightArrow))
                 moveInput = 1f;
         }
     }

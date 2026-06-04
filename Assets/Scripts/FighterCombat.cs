@@ -21,11 +21,8 @@ public class FighterCombat : MonoBehaviour
     public int maxHealth = 100;
     public float maxStamina = 100f;
 
-    [SerializeField]
-    private int currentHealth;
-
-    [SerializeField]
-    private float currentStamina;
+    [SerializeField] private int currentHealth;
+    [SerializeField] private float currentStamina;
 
     [Header("UI")]
     public Slider healthBar;
@@ -67,21 +64,19 @@ public class FighterCombat : MonoBehaviour
     private FighterController controller;
     private Rigidbody2D rb;
     private Animator animator;
-
     private FighterCombat opponentCombat;
-
     private SpriteRenderer[] spriteRenderers;
-
     private Coroutine deathFadeRoutine;
 
     private FighterState lastLoggedState;
     private FighterState lastAnimatedState = (FighterState)(-1);
 
+    private static int lastClashShakeFrame = -1;
+
     public int CurrentHealth => currentHealth;
     public float CurrentStamina => currentStamina;
 
     public bool IsDead => currentState == FighterState.Dead;
-
     public bool MatchEnded { get; private set; }
 
     public bool IsAttacking
@@ -147,17 +142,17 @@ public class FighterCombat : MonoBehaviour
 
         if (gameObject.name == "Player1")
         {
-            if (Input.GetKeyDown(KeyCode.F))
+            if (Input.GetKeyDown(KeyCode.JoystickButton2)) // X
                 StartHighAttack();
 
-            if (Input.GetKeyDown(KeyCode.G))
+            if (Input.GetKeyDown(KeyCode.JoystickButton0)) // A
                 StartLowAttack();
 
-            if (Input.GetKey(KeyCode.R))
+            if (Input.GetKey(KeyCode.JoystickButton3)) // Y
             {
                 StartHighBlock();
             }
-            else if (Input.GetKey(KeyCode.T))
+            else if (Input.GetKey(KeyCode.JoystickButton1)) // B
             {
                 StartLowBlock();
             }
@@ -249,33 +244,52 @@ public class FighterCombat : MonoBehaviour
         switch (currentState)
         {
             case FighterState.Idle:
-                PlayLoop("Idle");
+                PlayLoop(animator.HasState(0, Animator.StringToHash("Idle 2"))
+                    ? "Idle 2"
+                    : "Idle");
                 break;
 
             case FighterState.Walking:
-                PlayLoop("Run");
+                PlayLoop(animator.HasState(0, Animator.StringToHash("Run 2"))
+                    ? "Run 2"
+                    : "Run");
                 break;
 
             case FighterState.AttackHigh:
             case FighterState.AttackLow:
-                PlayTimed("Attack", attackDuration);
+                PlayTimed(
+                    animator.HasState(0, Animator.StringToHash("Attack 2"))
+                        ? "Attack 2"
+                        : "Attack",
+                    attackDuration
+                );
                 break;
 
             case FighterState.BlockHigh:
             case FighterState.BlockLow:
-                PlayLoop("Block");
+                PlayLoop(
+                    animator.HasState(0, Animator.StringToHash("Block 2"))
+                        ? "Block 2"
+                        : "Block"
+                );
                 break;
 
             case FighterState.Hitstun:
-                PlayTimed("Hurt", hitstunDuration);
-                break;
-
             case FighterState.Clash:
-                PlayTimed("Hurt", clashDuration);
+                PlayTimed(
+                    animator.HasState(0, Animator.StringToHash("Hurt 2"))
+                        ? "Hurt 2"
+                        : "Hurt",
+                    hitstunDuration
+                );
                 break;
 
             case FighterState.Dead:
-                PlayLoop("Hurt");
+                PlayLoop(
+                    animator.HasState(0, Animator.StringToHash("Hurt 2"))
+                        ? "Hurt 2"
+                        : "Hurt"
+                );
                 break;
         }
     }
@@ -464,6 +478,7 @@ public class FighterCombat : MonoBehaviour
         }
 
         PlayClip(damageClip);
+        CameraShake.Instance?.ShakeHit();
 
         currentHealth -= 10;
         if (currentHealth < 0)
@@ -488,11 +503,20 @@ public class FighterCombat : MonoBehaviour
         if (IsDead || MatchEnded)
             return;
 
+        if (currentState == FighterState.Clash)
+            return;
+
         PlayClip(clashClip);
 
         currentState = FighterState.Clash;
 
         ApplyKnockback(attacker, hitKnockback);
+
+        if (lastClashShakeFrame != Time.frameCount)
+        {
+            lastClashShakeFrame = Time.frameCount;
+            CameraShake.Instance?.ShakeClash();
+        }
 
         CancelInvoke(nameof(EndClash));
         Invoke(nameof(EndClash), clashDuration);
