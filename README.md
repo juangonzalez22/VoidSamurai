@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="Assets/logo.png" alt="Void Samurai Logo" width="728"/>
+  <img src="Assets/Sprites/LOGO.png" alt="Void Samurai Logo" width="728"/>
 </p>
 
 <h1 align="center">Void Samurai</h1>
