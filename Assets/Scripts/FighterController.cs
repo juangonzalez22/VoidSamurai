@@ -42,12 +42,12 @@ public class FighterController : MonoBehaviour
 
         if (gameObject.name == "Player1")
         {
-            float axis = Input.GetAxisRaw("Horizontal");
-
-            if (Mathf.Abs(axis) >= stickDeadzone)
-                moveInput = Mathf.Sign(axis);
-            else
-                moveInput = 0f;
+            // JoystickButton4 = LB (izquierda), JoystickButton5 = RB (derecha)
+            // Cambia estos keycodes según los botones de tu joystick que quieras usar
+            if (Input.GetKey(KeyCode.JoystickButton4))
+                moveInput = -1f;
+            else if (Input.GetKey(KeyCode.JoystickButton5))
+                moveInput = 1f;
         }
         else
         {
